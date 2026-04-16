@@ -41,11 +41,11 @@
 }
 
 .lyricLine.active {
-  color: var(--accent-primary);
+  color: var(--accent-tertiary);
   opacity: 1;
   font-size: 34px;
   font-weight: 700;
-  text-shadow: 2px 2px 0px var(--accent-secondary), 0 0 30px var(--glow-color);
+  text-shadow: 2px 2px 0px rgba(14, 154, 167, 0.3), 0 0 30px var(--turquoise-glow);
 }
 
 .lyricLine:hover {

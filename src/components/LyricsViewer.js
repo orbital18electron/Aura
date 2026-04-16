@@ -77,12 +77,17 @@ export default function LyricsViewer() {
     return () => clearInterval(interval);
   }, [isPlaying, playingSince, lyrics, activeLineIndex]);
 
-  // Auto-scroll
+  // Auto-scroll — scoped to lyrics container only (no page scroll leak)
   useEffect(() => {
     if (activeLineIndex >= 0 && containerRef.current) {
       const activeEl = containerRef.current.children[activeLineIndex];
       if (activeEl) {
-        activeEl.scrollIntoView({ behavior: "smooth", block: "center" });
+        const container = containerRef.current;
+        const elTop = activeEl.offsetTop;
+        const elHeight = activeEl.offsetHeight;
+        const containerHeight = container.clientHeight;
+        const targetScroll = elTop - containerHeight / 2 + elHeight / 2;
+        container.scrollTo({ top: targetScroll, behavior: "smooth" });
       }
     }
   }, [activeLineIndex]);

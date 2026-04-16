@@ -59,7 +59,7 @@
   left: 0;
   width: 60px;
   height: 2px;
-  background: var(--accent-primary);
+  background: var(--accent-tertiary);
 }
 
 /* TrackCard grid */
@@ -109,8 +109,8 @@
 }
 
 .trackCard.playing {
-  border-color: var(--accent-primary);
-  background-color: rgba(232, 93, 38, 0.08);
+  border-color: var(--accent-tertiary);
+  background-color: rgba(14, 154, 167, 0.08);
 }
 
 .trackArtwork {

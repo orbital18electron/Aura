@@ -16,10 +16,10 @@
   --text-muted: #8b6f5e;
   --text-inverse: #faf3e8;
 
-  /* Accent — Saffron & Sindoor */
+  /* Accent — Saffron, Sindoor & Turquoise */
   --accent-primary: #e85d26;     /* sindoor orange-red */
   --accent-secondary: #d4a940;   /* harvest gold */
-  --accent-tertiary: #1a7a4f;    /* bottle green */
+  --accent-tertiary: #0e9aa7;    /* Indian turquoise */
 
   --accent-color: #e85d26;
   --accent-hover: #c94d1c;
@@ -34,6 +34,7 @@
 
   /* Misc */
   --glow-color: rgba(232, 93, 38, 0.25);
+  --turquoise-glow: rgba(14, 154, 167, 0.25);
   --grain-opacity: 0.04;
 }
 
@@ -48,10 +49,10 @@
   --text-muted: #a88a6f;
   --text-inverse: #140a06;
 
-  /* Accent — glowing saffron & gold */
+  /* Accent — glowing saffron, gold & turquoise */
   --accent-primary: #f07030;
   --accent-secondary: #e8b84d;
-  --accent-tertiary: #2eb870;
+  --accent-tertiary: #14c4d0;    /* bright Indian turquoise */
 
   --accent-color: #f07030;
   --accent-hover: #ff8a4c;
@@ -66,6 +67,7 @@
 
   /* Misc */
   --glow-color: rgba(240, 112, 48, 0.2);
+  --turquoise-glow: rgba(20, 196, 208, 0.2);
   --grain-opacity: 0.06;
 }
 

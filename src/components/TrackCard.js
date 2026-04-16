@@ -13,7 +13,6 @@ export default function TrackCard({ track, styles }) {
   const handlePlay = async () => {
     if (!session) return;
     
-    // Update global state immediately for fast UI feedback
     setCurrentTrack(track);
     setIsPlaying(true);
 
@@ -26,20 +25,26 @@ export default function TrackCard({ track, styles }) {
     }
   };
 
+  const albumArt = track?.album?.images?.[0]?.url;
+
   return (
     <div className={styles.trackCard} onClick={handlePlay} role="button" tabIndex={0}>
       <div className={styles.imgWrapper}>
-        <Image 
-          src={track.album.images[0].url} 
-          alt={track.name} 
-          width={80} 
-          height={80} 
-          className={styles.cover}
-        />
+        {albumArt ? (
+          <Image 
+            src={albumArt} 
+            alt={track.name} 
+            width={80} 
+            height={80} 
+            className={styles.cover}
+          />
+        ) : (
+          <div style={{ width: 80, height: 80, borderRadius: 4, background: 'var(--bg-tertiary)' }} />
+        )}
       </div>
       <div className={styles.info}>
         <h3>{track.name}</h3>
-        <p>{track.artists.map(a => a.name).join(", ")}</p>
+        <p>{track.artists?.map(a => a.name).join(", ")}</p>
       </div>
     </div>
   );

@@ -57,15 +57,15 @@
 }
 
 .navItem:hover {
-  color: var(--accent-primary);
-  background-color: rgba(232, 93, 38, 0.08);
-  border-color: rgba(232, 93, 38, 0.15);
+  color: var(--accent-tertiary);
+  background-color: rgba(14, 154, 167, 0.08);
+  border-color: rgba(14, 154, 167, 0.15);
 }
 
 .active {
-  color: var(--accent-primary);
-  background-color: rgba(232, 93, 38, 0.1);
-  border-color: var(--accent-primary);
+  color: var(--accent-tertiary);
+  background-color: rgba(14, 154, 167, 0.1);
+  border-color: var(--accent-tertiary);
   font-weight: 600;
 }
 
