@@ -16,33 +16,43 @@
 .searchInputWrapper {
   position: relative;
   width: 100%;
-  max-width: 500px;
+  max-width: 520px;
 }
 
 .searchIcon {
   position: absolute;
-  left: 16px;
+  left: 18px;
   top: 50%;
   transform: translateY(-50%);
-  color: var(--text-muted);
+  color: var(--accent-secondary);
 }
 
 .searchInput {
   width: 100%;
-  padding: 16px 16px 16px 52px;
-  border-radius: 30px;
-  border: 1px solid var(--border-color);
+  padding: 16px 16px 16px 54px;
+  border-radius: 4px;
+  border: 2px solid var(--border-ornate);
   background-color: var(--bg-secondary);
   color: var(--text-main);
-  font-family: var(--font-inter);
-  font-size: 16px;
+  font-family: var(--font-display), sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   outline: none;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+}
+
+.searchInput::placeholder {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
 }
 
 .searchInput:focus {
-  border-color: #1ed760;
-  background-color: rgba(255, 255, 255, 0.1);
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 20px var(--glow-color);
+  background-color: var(--bg-tertiary);
 }
 
 .resultsSection {
@@ -51,13 +61,24 @@
   gap: 16px;
 }
 
+.resultsSection h2 {
+  font-family: var(--font-display), sans-serif;
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-primary);
+}
+
 .loading, .empty {
   color: var(--text-muted);
+  font-family: var(--font-display), sans-serif;
   font-size: 16px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
   margin-top: 32px;
 }
 
-/* Reuse track grid from page.js */
 .tracksGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));

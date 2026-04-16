@@ -10,20 +10,35 @@
 }
 
 .header h1 {
-  font-family: var(--font-serif);
-  font-size: 48px;
-  font-weight: 700;
+  font-family: var(--font-accent), serif;
+  font-size: 52px;
+  font-weight: 400;
   margin-bottom: 8px;
-  color: var(--text-main);
+  color: var(--accent-primary);
+  text-shadow: 2px 2px 0px var(--accent-secondary);
 }
 
 .sectionTitle {
+  font-family: var(--font-display), sans-serif;
   font-size: 24px;
-  font-family: var(--font-inter);
+  font-weight: 600;
   margin-bottom: 24px;
   color: var(--text-main);
-  border-bottom: 1px solid var(--border-color);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-bottom: 2px solid var(--border-ornate);
   padding-bottom: 12px;
+  position: relative;
+}
+
+.sectionTitle::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 60px;
+  height: 2px;
+  background: var(--accent-primary);
 }
 
 .playlistsGrid {
@@ -35,31 +50,53 @@
 .playlistCard {
   background-color: var(--bg-secondary);
   border: 1px solid var(--border-color);
-  border-radius: 8px;
+  border-radius: 4px;
   padding: 16px;
   display: flex;
   flex-direction: column;
   gap: 16px;
-  transition: all 0.2s ease;
+  transition: all 0.25s ease;
   cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Decorative top accent on hover */
+.playlistCard::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+  transform-origin: left;
+}
+
+.playlistCard:hover::before {
+  transform: scaleX(1);
 }
 
 .playlistCard:hover {
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: var(--bg-tertiary);
+  border-color: var(--border-ornate);
   transform: translateY(-4px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
 }
 
 .coverWrapper {
   width: 100%;
   aspect-ratio: 1/1;
   position: relative;
-  border-radius: 4px;
+  border-radius: 2px;
   overflow: hidden;
-  background-color: var(--border-color);
+  background-color: var(--bg-tertiary);
   display: flex;
   align-items: center;
   justify-content: center;
+  border: 1px solid var(--border-ornate);
 }
 
 .coverImage {
@@ -71,12 +108,15 @@
 }
 
 .playlistInfo h3 {
+  font-family: var(--font-display), sans-serif;
   font-size: 16px;
   font-weight: 700;
   margin-bottom: 4px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .playlistInfo p {
@@ -93,4 +133,6 @@
 .emptyMessage {
   color: var(--text-muted);
   font-style: italic;
+  font-family: var(--font-display), sans-serif;
+  letter-spacing: 0.04em;
 }

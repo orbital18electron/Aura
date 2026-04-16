@@ -11,7 +11,7 @@ export default function Login() {
         <Headphones size={48} className={styles.icon} />
         <h1>Aura</h1>
       </div>
-      <p className={styles.subtitle}>Stream your favorites, without the noise.</p>
+      <p className={styles.subtitle}>Your music. Your vibe. Your era.</p>
       <button className={styles.loginBtn} onClick={() => signIn("spotify", { callbackUrl: "/" })}>
         Continue with Spotify
       </button>

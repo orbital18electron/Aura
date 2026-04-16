@@ -5,16 +5,40 @@
   justify-content: center;
   text-align: center;
   padding: 48px;
-  background-color: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: 24px;
-  max-width: 400px;
+  background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+  border: 2px solid var(--border-ornate);
+  border-radius: 8px;
+  max-width: 420px;
   width: 90%;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.04);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Decorative top stripe */
+.container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary), var(--accent-tertiary));
+}
+
+/* Decorative bottom stripe */
+.container::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent-tertiary), var(--accent-secondary), var(--accent-primary));
 }
 
 [data-theme='dark'] .container {
-  box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);
 }
 
 .brand {
@@ -26,33 +50,43 @@
 }
 
 .brand h1 {
-  font-family: var(--font-serif);
-  font-size: 3rem;
-  font-weight: 600;
-  letter-spacing: -0.02em;
+  font-family: var(--font-accent), serif;
+  font-size: 4rem;
+  font-weight: 400;
+  color: var(--accent-primary);
+  text-shadow: 3px 3px 0px var(--accent-secondary);
 }
 
 .icon {
-  color: var(--text-main);
+  color: var(--accent-secondary);
 }
 
 .subtitle {
   color: var(--text-muted);
+  font-family: var(--font-display), sans-serif;
   font-size: 1.1rem;
+  font-weight: 400;
   margin-bottom: 40px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
 .loginBtn {
-  background-color: var(--text-main);
-  color: var(--bg-color);
-  padding: 16px 32px;
-  border-radius: 100px;
-  font-size: 1rem;
-  font-weight: 500;
-  transition: transform 0.2s ease, opacity 0.2s ease;
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  color: #fff;
+  padding: 16px 40px;
+  border-radius: 4px;
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 20px var(--glow-color);
+  border: 1px solid var(--accent-secondary);
 }
 
 .loginBtn:hover {
-  transform: scale(1.02);
-  opacity: 0.9;
+  transform: scale(1.03);
+  box-shadow: 0 8px 32px var(--glow-color);
 }

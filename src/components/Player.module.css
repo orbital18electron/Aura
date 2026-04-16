@@ -18,10 +18,12 @@
 .coverPlaceholder {
   width: 56px;
   height: 56px;
-  background-color: var(--bg-tertiary);
-  border-radius: 8px;
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  border-radius: 4px;
   object-fit: cover;
   flex-shrink: 0;
+  border: 2px solid var(--border-ornate);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
 }
 
 .textDetails {
@@ -30,12 +32,16 @@
 }
 
 .textDetails h4 {
-  font-size: 0.95rem;
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.15rem;
   font-weight: 600;
-  margin-bottom: 4px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 2px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  color: var(--text-main);
 }
 
 .textDetails p {
@@ -44,6 +50,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-weight: 400;
 }
 
 .controls {
@@ -56,27 +63,30 @@
 
 .controlBtn {
   color: var(--text-muted);
-  transition: color 0.2s;
+  transition: color 0.2s, transform 0.2s;
 }
 
 .controlBtn:hover {
-  color: var(--text-main);
+  color: var(--accent-secondary);
+  transform: scale(1.1);
 }
 
 .playBtn {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
-  background-color: var(--text-main);
-  color: var(--bg-color);
-  transition: transform 0.2s ease;
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  color: #fff;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 20px var(--glow-color);
 }
 
 .playBtn:hover {
-  transform: scale(1.08);
+  transform: scale(1.1);
+  box-shadow: 0 6px 28px var(--glow-color);
 }
 
 .actions {
@@ -109,9 +119,10 @@
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background: var(--text-main);
+  background: var(--accent-secondary);
   cursor: pointer;
   transition: transform 0.15s ease;
+  box-shadow: 0 2px 8px rgba(212, 169, 64, 0.4);
 }
 
 .volumeSlider::-webkit-slider-thumb:hover {
@@ -122,7 +133,7 @@
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background: var(--text-main);
+  background: var(--accent-secondary);
   cursor: pointer;
   border: none;
 }
