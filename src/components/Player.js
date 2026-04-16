@@ -1,6 +1,6 @@
 "use client";
 import styles from "./Player.module.css";
-import { Play, Pause, SkipBack, SkipForward, Volume2, Mic2 } from "lucide-react";
+import { Play, Pause, SkipBack, SkipForward, Volume2, Mic2, ListMusic } from "lucide-react";
 import { useStore } from "@/lib/store";
 import { useSession } from "next-auth/react";
 import { playSong, pauseSong, setVolume } from "@/lib/spotify";
@@ -21,6 +21,8 @@ export default function Player() {
   const playingSince = useStore((state) => state.playingSince);
   const showLyrics = useStore((state) => state.showLyrics);
   const toggleLyrics = useStore((state) => state.toggleLyrics);
+  const showQueue = useStore((state) => state.showQueue);
+  const toggleQueue = useStore((state) => state.toggleQueue);
   
   const [volume, setVolumeLevel] = useState(50);
   const [dominantColor, setDominantColor] = useState(null);
@@ -28,7 +30,6 @@ export default function Player() {
 
   const durationMs = currentTrack?.duration_ms || 0;
 
-  // Progress timer
   useEffect(() => {
     if (!isPlaying || !playingSince) return;
     const interval = setInterval(() => {
@@ -37,12 +38,10 @@ export default function Player() {
     return () => clearInterval(interval);
   }, [isPlaying, playingSince]);
 
-  // Reset progress when track changes
   useEffect(() => {
     setProgressMs(0);
   }, [currentTrack]);
 
-  // Safe color extraction
   useEffect(() => {
     if (!currentTrack?.album?.images?.[0]?.url) {
       setDominantColor(null);
@@ -90,18 +89,12 @@ export default function Player() {
     const newVol = e.target.value;
     setVolumeLevel(newVol);
     if (session) {
-      try {
-        await setVolume(session.user.accessToken, newVol);
-      } catch {
-        // Premium restriction
-      }
+      try { await setVolume(session.user.accessToken, newVol); } catch {}
     }
   };
 
   const progressPercent = durationMs > 0 ? Math.min((progressMs / durationMs) * 100, 100) : 0;
-  const bgStyle = dominantColor
-    ? { background: `linear-gradient(to right, ${dominantColor}, var(--player-bg))` }
-    : {};
+  const bgStyle = dominantColor ? { background: `linear-gradient(to right, ${dominantColor}, var(--player-bg))` } : {};
 
   return (
     <div className={styles.playerContainer} style={bgStyle}>
@@ -140,16 +133,20 @@ export default function Player() {
         <button
           className={`${styles.lyricsBtn} ${showLyrics ? styles.lyricsBtnActive : ""}`}
           onClick={toggleLyrics}
-          title="Toggle Lyrics"
+          title="Toggle Lyrics (L)"
         >
           <Mic2 size={18} />
         </button>
+        <button
+          className={`${styles.lyricsBtn} ${showQueue ? styles.lyricsBtnActive : ""}`}
+          onClick={toggleQueue}
+          title="Toggle Queue (Q)"
+        >
+          <ListMusic size={18} />
+        </button>
         <Volume2 size={20} className={styles.icon} />
         <input 
-           type="range" 
-           min="0" 
-           max="100" 
-           value={volume}
+           type="range" min="0" max="100" value={volume}
            onChange={handleVolumeChange}
            className={styles.volumeSlider}
         />

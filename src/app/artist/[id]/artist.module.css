@@ -1,0 +1,288 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding-bottom: 40px;
+}
+
+/* Hero */
+.hero {
+  position: relative;
+  height: 320px;
+  border-radius: 4px;
+  overflow: hidden;
+  margin: -36px -48px 0;
+  border-bottom: 3px solid var(--border-ornate);
+}
+
+.heroImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(20, 10, 6, 0.1) 0%,
+    rgba(20, 10, 6, 0.5) 60%,
+    var(--bg-color) 100%
+  );
+}
+
+.heroContent {
+  position: absolute;
+  bottom: 24px;
+  left: 48px;
+  z-index: 2;
+}
+
+.artistName {
+  font-family: var(--font-accent), serif;
+  font-size: 56px;
+  font-weight: 400;
+  color: #fff;
+  text-shadow: 3px 3px 0 rgba(232, 93, 38, 0.5);
+  margin-bottom: 8px;
+  line-height: 1;
+}
+
+.followers {
+  font-family: var(--font-display), sans-serif;
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.genres {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.genreTag {
+  font-family: var(--font-display), sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 4px 14px;
+  border-radius: 3px;
+  border: 1px solid var(--accent-tertiary);
+  color: var(--accent-tertiary);
+  background: rgba(14, 154, 167, 0.15);
+}
+
+/* Sections */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sectionTitle {
+  font-family: var(--font-display), sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-main);
+  border-bottom: 2px solid var(--border-ornate);
+  padding-bottom: 8px;
+  position: relative;
+}
+
+.sectionTitle::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 50px;
+  height: 2px;
+  background: var(--accent-tertiary);
+}
+
+/* Track List */
+.trackList {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.trackRow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid transparent;
+}
+
+.trackRow:hover {
+  background: var(--bg-secondary);
+  border-color: var(--border-color);
+}
+
+.trackIndex {
+  font-family: var(--font-display), sans-serif;
+  font-size: 16px;
+  color: var(--text-muted);
+  min-width: 24px;
+  text-align: center;
+}
+
+.trackThumb {
+  width: 44px;
+  height: 44px;
+  border-radius: 3px;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-ornate);
+}
+
+.trackInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.trackName {
+  font-family: var(--font-display), sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-main);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.trackAlbum {
+  font-size: 12px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.trackDuration {
+  font-family: var(--font-display), sans-serif;
+  font-size: 13px;
+  color: var(--text-muted);
+  min-width: 40px;
+  text-align: right;
+}
+
+.trackQueueBtn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s, color 0.2s;
+  padding: 4px;
+}
+
+.trackRow:hover .trackQueueBtn {
+  opacity: 1;
+}
+
+.trackQueueBtn:hover {
+  color: var(--accent-tertiary);
+}
+
+/* Albums Grid */
+.albumsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 20px;
+}
+
+.albumCard {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.albumImg {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 4px;
+  object-fit: cover;
+  border: 2px solid var(--border-ornate);
+  transition: transform 0.2s, box-shadow 0.3s;
+}
+
+.albumCard:hover .albumImg {
+  transform: scale(1.03);
+  box-shadow: 0 8px 24px var(--glow-color);
+}
+
+.albumName {
+  font-family: var(--font-display), sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-main);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.albumYear {
+  font-size: 12px;
+  color: var(--text-muted);
+  text-transform: capitalize;
+}
+
+/* Related Artists */
+.relatedGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 20px;
+}
+
+.relatedCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  transition: transform 0.2s;
+}
+
+.relatedCard:hover {
+  transform: translateY(-4px);
+}
+
+.relatedImg {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--border-ornate);
+  transition: box-shadow 0.3s;
+}
+
+.relatedCard:hover .relatedImg {
+  box-shadow: 0 0 20px var(--turquoise-glow);
+  border-color: var(--accent-tertiary);
+}
+
+.relatedName {
+  font-family: var(--font-display), sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-main);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-align: center;
+}

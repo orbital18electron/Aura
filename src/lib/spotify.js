@@ -12,7 +12,8 @@ const scopes = [
   "user-modify-playback-state",
   "user-read-currently-playing",
   "user-read-recently-played",
-  "user-follow-read"
+  "user-follow-read",
+  "ugc-image-upload"
 ].join(",");
 
 const params = {
@@ -36,7 +37,7 @@ export const fetchWebApi = async (endpoint, method, body, token) => {
   });
 
   if (!res.ok) {
-    if (res.status === 204) return null; // Expected for some actions like play/pause
+    if (res.status === 204) return null;
     let errorDetail = "";
     try {
       const errorData = await res.json();
@@ -95,4 +96,46 @@ export const getUserProfile = async (token) => {
 
 export const getUserTopArtists = async (token) => {
   return await fetchWebApi(`v1/me/top/artists?limit=10`, 'GET', null, token);
+};
+
+// --- Artist Deep-Dive ---
+export const getArtist = async (token, id) => {
+  return await fetchWebApi(`v1/artists/${id}`, 'GET', null, token);
+};
+
+export const getArtistTopTracks = async (token, id) => {
+  return await fetchWebApi(`v1/artists/${id}/top-tracks?market=from_token`, 'GET', null, token);
+};
+
+export const getArtistAlbums = async (token, id) => {
+  return await fetchWebApi(`v1/artists/${id}/albums?include_groups=album,single&limit=20`, 'GET', null, token);
+};
+
+export const getRelatedArtists = async (token, id) => {
+  return await fetchWebApi(`v1/artists/${id}/related-artists`, 'GET', null, token);
+};
+
+// --- Recommendations ---
+export const getRecommendations = async (token, seedTrackIds) => {
+  const seeds = seedTrackIds.slice(0, 5).join(',');
+  return await fetchWebApi(`v1/recommendations?seed_tracks=${seeds}&limit=5`, 'GET', null, token);
+};
+
+// --- Queue ---
+export const addToQueue = async (token, trackUri) => {
+  return await fetchWebApi(`v1/me/player/queue?uri=${encodeURIComponent(trackUri)}`, 'POST', null, token);
+};
+
+// --- Playlist Cover ---
+export const updatePlaylistCover = async (token, playlistId, base64Image) => {
+  const res = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/images`, {
+    method: 'PUT',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'image/jpeg',
+    },
+    body: base64Image,
+  });
+  if (!res.ok) throw new Error(`Failed to upload cover: ${res.status}`);
+  return null;
 };

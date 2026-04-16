@@ -2,6 +2,8 @@
 import Sidebar from "./Sidebar";
 import Player from "./Player";
 import LyricsViewer from "./LyricsViewer";
+import QueuePanel from "./QueuePanel";
+import KeyboardShortcuts from "./KeyboardShortcuts";
 import styles from "./LayoutShell.module.css";
 import { useSession } from "next-auth/react";
 import { useStore } from "@/lib/store";
@@ -9,6 +11,9 @@ import { useStore } from "@/lib/store";
 export default function LayoutShell({ children }) {
   const { status } = useSession();
   const showLyrics = useStore((state) => state.showLyrics);
+  const showQueue = useStore((state) => state.showQueue);
+
+  const hasRightPanel = showLyrics || showQueue;
 
   if (status === "loading") {
     return <main className={styles.loginWrapper}><div className={styles.loader}></div></main>;
@@ -19,7 +24,7 @@ export default function LayoutShell({ children }) {
   }
 
   return (
-    <div className={`${styles.container} ${showLyrics ? styles.lyricsOpen : styles.lyricsClosed}`}>
+    <div className={`${styles.container} ${hasRightPanel ? styles.panelOpen : styles.panelClosed}`}>
       <aside className={styles.sidebarSection}>
         <Sidebar />
       </aside>
@@ -29,13 +34,19 @@ export default function LayoutShell({ children }) {
         </div>
       </main>
       {showLyrics && (
-        <aside className={styles.lyricsSection}>
+        <aside className={styles.rightPanel}>
           <LyricsViewer />
+        </aside>
+      )}
+      {showQueue && (
+        <aside className={styles.rightPanel}>
+          <QueuePanel />
         </aside>
       )}
       <footer className={styles.playerSection}>
         <Player />
       </footer>
+      <KeyboardShortcuts />
     </div>
   );
 }

@@ -146,3 +146,18 @@ button {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+/* ---- Responsive Typography ---- */
+@media (max-width: 768px) {
+  body {
+    font-size: 14px;
+  }
+
+  h1 {
+    font-size: 2rem !important;
+  }
+
+  h2 {
+    font-size: 1.3rem !important;
+  }
+}

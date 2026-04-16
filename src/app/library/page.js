@@ -4,6 +4,7 @@ import { getUserPlaylists, getSavedTracks } from "@/lib/spotify";
 import { redirect } from "next/navigation";
 import Image from "next/image";
 import TrackCard from "@/components/TrackCard";
+import PageTransition from "@/components/PageTransition";
 import styles from "./library.module.css";
 import pageStyles from "../page.module.css";
 import { Music } from "lucide-react";
@@ -26,6 +27,7 @@ export default async function LibraryPage() {
   const savedTracks = savedTracksRes?.items?.map(item => item.track) || [];
 
   return (
+    <PageTransition>
     <div className={styles.container}>
       <header className={styles.header}>
         <h1>Your Library</h1>
@@ -75,5 +77,6 @@ export default async function LibraryPage() {
         )}
       </section>
     </div>
+    </PageTransition>
   );
 }

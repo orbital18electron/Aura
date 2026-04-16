@@ -3,6 +3,7 @@ import { authOptions } from "../api/auth/[...nextauth]/route";
 import { getUserProfile, getUserTopArtists } from "@/lib/spotify";
 import { redirect } from "next/navigation";
 import Image from "next/image";
+import PageTransition from "@/components/PageTransition";
 import styles from "./profile.module.css";
 import { User } from "lucide-react";
 
@@ -26,6 +27,7 @@ export default async function ProfilePage() {
   const productType = profile?.product === "premium" ? "Spotify Premium" : "Spotify Free";
 
   return (
+    <PageTransition>
     <div className={styles.container}>
       {/* Hero section */}
       <div className={styles.hero}>
@@ -91,5 +93,6 @@ export default async function ProfilePage() {
         </section>
       )}
     </div>
+    </PageTransition>
   );
 }

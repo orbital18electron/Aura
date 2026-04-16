@@ -6,6 +6,8 @@ import { playSong, pauseSong, setVolume } from "@/lib/spotify";
 import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX, Disc3 } from "lucide-react";
 import { useState, useEffect } from "react";
 import styles from "./NowPlaying.module.css";
+import ShareCard from "./ShareCard";
+import Recommendations from "./Recommendations";
 
 function formatTime(ms) {
   const totalSec = Math.floor(ms / 1000);
@@ -25,7 +27,6 @@ export default function NowPlaying() {
 
   const durationMs = currentTrack?.duration_ms || 0;
 
-  // Progress timer
   useEffect(() => {
     if (!isPlaying || !playingSince) return;
     const interval = setInterval(() => {
@@ -72,11 +73,7 @@ export default function NowPlaying() {
     const newVol = parseInt(e.target.value);
     setVolumeLevel(newVol);
     if (session) {
-      try {
-        await setVolume(session.user.accessToken, newVol);
-      } catch {
-        // Premium restriction
-      }
+      try { await setVolume(session.user.accessToken, newVol); } catch {}
     }
   };
 
@@ -101,7 +98,6 @@ export default function NowPlaying() {
         <p className={styles.artistName}>{artistNames}</p>
         {albumName && <p className={styles.albumName}>{albumName}</p>}
 
-        {/* Progress bar */}
         <div className={styles.progressRow}>
           <span className={styles.timeLabel}>{formatTime(progressMs)}</span>
           <div className={styles.progressBar}>
@@ -120,16 +116,13 @@ export default function NowPlaying() {
 
         <div className={styles.volumeRow}>
           {volume === 0 ? <VolumeX size={18} /> : <Volume2 size={18} />}
-          <input
-            type="range"
-            min="0"
-            max="100"
-            value={volume}
-            onChange={handleVolumeChange}
-            className={styles.volumeSlider}
-          />
+          <input type="range" min="0" max="100" value={volume}
+            onChange={handleVolumeChange} className={styles.volumeSlider} />
           <span className={styles.volumeLabel}>{volume}%</span>
+          <ShareCard />
         </div>
+
+        <Recommendations />
       </div>
     </div>
   );

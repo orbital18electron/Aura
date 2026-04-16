@@ -4,8 +4,9 @@ import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { searchSpotify } from "@/lib/spotify";
 import TrackCard from "@/components/TrackCard";
+import PageTransition from "@/components/PageTransition";
 import styles from "./search.module.css";
-import pageStyles from "../page.module.css"; // Borrowing layout styles for TrackCard consistency
+import pageStyles from "../page.module.css";
 import { Search } from "lucide-react";
 
 export default function SearchPage() {
@@ -47,6 +48,7 @@ export default function SearchPage() {
   }, [query, session]);
 
   return (
+    <PageTransition>
     <div className={styles.container}>
       <div className={styles.searchHeader}>
         <div className={styles.searchInputWrapper}>
@@ -81,5 +83,6 @@ export default function SearchPage() {
         )}
       </div>
     </div>
+    </PageTransition>
   );
 }
