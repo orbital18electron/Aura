@@ -14,21 +14,30 @@ export default function SearchPage() {
   const [results, setResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
 
+  const [errorMsg, setErrorMsg] = useState("");
+
   useEffect(() => {
     if (!query.trim() || !session) {
       setResults([]);
+      setErrorMsg("");
       return;
     }
 
     const timerId = setTimeout(async () => {
       setIsSearching(true);
+      setErrorMsg("");
       try {
         const data = await searchSpotify(session.user.accessToken, query);
         if (data && data.tracks) {
           setResults(data.tracks.items);
+        } else {
+          setResults([]);
+          if (data && data.error) setErrorMsg(data.error.message);
         }
       } catch (err) {
         console.error(err);
+        setErrorMsg(err.message || "Failed to fetch");
+        setResults([]);
       } finally {
         setIsSearching(false);
       }
@@ -57,8 +66,9 @@ export default function SearchPage() {
         {query && <h2>Top Results</h2>}
         
         {isSearching && <p className={styles.loading}>Searching...</p>}
+        {errorMsg && <p className={styles.loading} style={{color: 'red'}}>{errorMsg}</p>}
         
-        {!isSearching && query && results.length === 0 && (
+        {!isSearching && !errorMsg && query && results.length === 0 && (
           <p className={styles.empty}>No tracks found for "{query}"</p>
         )}
 

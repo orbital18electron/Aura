@@ -31,6 +31,7 @@ export const fetchWebApi = async (endpoint, method, body, token) => {
       ...(method === 'POST' || method === 'PUT' ? { 'Content-Type': 'application/json' } : {})
     },
     method,
+    cache: 'no-store',
     ...(body ? { body: JSON.stringify(body) } : {})
   });
 
