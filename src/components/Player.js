@@ -3,7 +3,7 @@ import styles from "./Player.module.css";
 import { Play, Pause, SkipBack, SkipForward, Volume2, Mic2, ListMusic } from "lucide-react";
 import { useStore } from "@/lib/store";
 import { useSession } from "next-auth/react";
-import { playSong, pauseSong, setVolume } from "@/lib/spotify";
+import { playSong, pauseSong, resumePlayback, setVolume } from "@/lib/spotify";
 import { useState, useEffect } from "react";
 
 function formatTime(ms) {
@@ -77,7 +77,8 @@ export default function Player() {
         await pauseSong(session.user.accessToken);
         setIsPlaying(false);
       } else {
-        await playSong(session.user.accessToken, currentTrack.uri);
+        // Resume from paused position (not restart)
+        await resumePlayback(session.user.accessToken);
         setIsPlaying(true);
       }
     } catch (err) {

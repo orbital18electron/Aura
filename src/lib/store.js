@@ -5,6 +5,7 @@ export const useStore = create((set, get) => ({
   currentTrack: null,
   isPlaying: false,
   playingSince: null,
+  pausedElapsed: 0,   // ms elapsed when paused — for accurate progress resume
   
   // Playlists
   userPlaylists: [],
@@ -18,8 +19,19 @@ export const useStore = create((set, get) => ({
   queue: [],
   
   // Actions — Playback
-  setCurrentTrack: (track) => set({ currentTrack: track, playingSince: Date.now() }),
-  setIsPlaying: (isPlaying) => set({ isPlaying, playingSince: isPlaying ? Date.now() : null }),
+  setCurrentTrack: (track) => set({ currentTrack: track, playingSince: Date.now(), pausedElapsed: 0 }),
+  setIsPlaying: (isPlaying) => {
+    const state = get();
+    if (isPlaying) {
+      // Resuming — adjust playingSince so elapsed calculation stays accurate
+      const adjustedStart = Date.now() - state.pausedElapsed;
+      set({ isPlaying: true, playingSince: adjustedStart });
+    } else {
+      // Pausing — capture how far we've played
+      const elapsed = state.playingSince ? Date.now() - state.playingSince : 0;
+      set({ isPlaying: false, pausedElapsed: elapsed });
+    }
+  },
   setUserPlaylists: (playlists) => set({ userPlaylists: playlists }),
   
   // Actions — UI toggles
@@ -29,7 +41,6 @@ export const useStore = create((set, get) => ({
   
   // Actions — Queue
   addToQueue: (track) => set((state) => {
-    // Don't add duplicates
     if (state.queue.some(t => t.id === track.id)) return state;
     return { queue: [...state.queue, track] };
   }),
@@ -46,7 +57,7 @@ export const useStore = create((set, get) => ({
     const state = get();
     if (state.queue.length === 0) return null;
     const [next, ...rest] = state.queue;
-    set({ queue: rest, currentTrack: next, isPlaying: true, playingSince: Date.now() });
+    set({ queue: rest, currentTrack: next, isPlaying: true, playingSince: Date.now(), pausedElapsed: 0 });
     return next;
   },
   clearQueue: () => set({ queue: [] }),

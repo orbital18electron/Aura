@@ -62,6 +62,11 @@ export const pauseSong = async (token) => {
   return await fetchWebApi('v1/me/player/pause', 'PUT', null, token);
 };
 
+export const resumePlayback = async (token) => {
+  // Calling play without a body resumes from the current position
+  return await fetchWebApi('v1/me/player/play', 'PUT', null, token);
+};
+
 export const createPlaylist = async (token, userId, name, description) => {
   return await fetchWebApi(`v1/users/${userId}/playlists`, 'POST', {
     name,

@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useStore } from "@/lib/store";
 import { useSession } from "next-auth/react";
-import { playSong, pauseSong } from "@/lib/spotify";
+import { playSong, pauseSong, resumePlayback } from "@/lib/spotify";
 import { X } from "lucide-react";
 import styles from "./KeyboardHelp.module.css";
 
@@ -41,7 +41,7 @@ export default function KeyboardShortcuts() {
             pauseSong(session.user.accessToken).catch(console.error);
             setIsPlaying(false);
           } else {
-            playSong(session.user.accessToken, currentTrack.uri).catch(console.error);
+            resumePlayback(session.user.accessToken).catch(console.error);
             setIsPlaying(true);
           }
           break;

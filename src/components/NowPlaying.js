@@ -2,7 +2,7 @@
 
 import { useStore } from "@/lib/store";
 import { useSession } from "next-auth/react";
-import { playSong, pauseSong, setVolume } from "@/lib/spotify";
+import { playSong, pauseSong, resumePlayback, setVolume } from "@/lib/spotify";
 import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX, Disc3 } from "lucide-react";
 import { useState, useEffect } from "react";
 import styles from "./NowPlaying.module.css";
@@ -61,7 +61,7 @@ export default function NowPlaying() {
         await pauseSong(session.user.accessToken);
         setIsPlaying(false);
       } else {
-        await playSong(session.user.accessToken, currentTrack.uri);
+        await resumePlayback(session.user.accessToken);
         setIsPlaying(true);
       }
     } catch (err) {
