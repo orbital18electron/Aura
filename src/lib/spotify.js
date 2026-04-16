@@ -80,3 +80,19 @@ export const getUserPlaylists = async (token) => {
 export const getSavedTracks = async (token) => {
   return await fetchWebApi(`v1/me/tracks?limit=24`, 'GET', null, token);
 };
+
+export const setVolume = async (token, volume) => {
+  return await fetchWebApi(`v1/me/player/volume?volume_percent=${volume}`, 'PUT', null, token);
+};
+
+export const getRecentlyPlayed = async (token) => {
+  return await fetchWebApi(`v1/me/player/recently-played?limit=10`, 'GET', null, token);
+};
+
+export const getUserProfile = async (token) => {
+  return await fetchWebApi(`v1/me`, 'GET', null, token);
+};
+
+export const getUserTopArtists = async (token) => {
+  return await fetchWebApi(`v1/me/top/artists?limit=10`, 'GET', null, token);
+};

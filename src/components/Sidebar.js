@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Search, Library, LogOut, Plus } from "lucide-react";
+import { Home, Search, Library, LogOut, Plus, User } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
 import { signOut } from "next-auth/react";
 import styles from "./Sidebar.module.css";
@@ -17,6 +17,7 @@ export default function Sidebar() {
     { label: "Home", href: "/", icon: Home },
     { label: "Search", href: "/search", icon: Search },
     { label: "Library", href: "/library", icon: Library },
+    { label: "Profile", href: "/profile", icon: User },
   ];
 
   return (

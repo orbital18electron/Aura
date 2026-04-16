@@ -3,13 +3,41 @@ import styles from "./Player.module.css";
 import { Play, Pause, SkipBack, SkipForward, Volume2 } from "lucide-react";
 import { useStore } from "@/lib/store";
 import { useSession } from "next-auth/react";
-import { playSong, pauseSong } from "@/lib/spotify";
+import { playSong, pauseSong, setVolume } from "@/lib/spotify";
+import { useState, useEffect, useRef } from "react";
 
 export default function Player() {
   const { data: session } = useSession();
   const currentTrack = useStore((state) => state.currentTrack);
   const isPlaying = useStore((state) => state.isPlaying);
   const setIsPlaying = useStore((state) => state.setIsPlaying);
+  
+  const [volume, setVolumeLevel] = useState(50);
+  const [dominantColor, setDominantColor] = useState("var(--player-bg)");
+
+  useEffect(() => {
+    if (!currentTrack?.album?.images?.[0]?.url) {
+       setDominantColor("var(--player-bg)");
+       return;
+    }
+
+    const img = new Image();
+    img.crossOrigin = "Anonymous";
+    img.src = currentTrack.album.images[0].url;
+    
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = 1;
+      canvas.height = 1;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, 1, 1);
+      const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
+      setDominantColor(`rgba(${r}, ${g}, ${b}, 0.2)`);
+    };
+    img.onerror = () => {
+      setDominantColor("var(--player-bg)");
+    };
+  }, [currentTrack]);
 
   const togglePlay = async () => {
     if (!session || !currentTrack) return;
@@ -27,10 +55,22 @@ export default function Player() {
     }
   };
 
+  const handleVolumeChange = async (e) => {
+    const newVol = e.target.value;
+    setVolumeLevel(newVol);
+    if (session) {
+      try {
+        await setVolume(session.user.accessToken, newVol);
+      } catch (err) {
+         console.warn("Failed to set volume (Desktop Web Player issue/Premium restriction)");
+      }
+    }
+  };
+
   return (
-    <div className={styles.playerContainer}>
+    <div className={styles.playerContainer} style={{ background: dominantColor ? `linear-gradient(to right, ${dominantColor}, var(--player-bg))` : "" }}>
       <div className={styles.trackInfo}>
-        {currentTrack ? (
+        {currentTrack?.album?.images?.[0]?.url ? (
            <img src={currentTrack.album.images[0].url} className={styles.coverPlaceholder} alt="cover" />
         ) : (
            <div className={styles.coverPlaceholder} />
@@ -51,9 +91,14 @@ export default function Player() {
 
       <div className={styles.actions}>
         <Volume2 size={20} className={styles.icon} />
-        <div className={styles.volumeBar}>
-          <div className={styles.volumeLevel}></div>
-        </div>
+        <input 
+           type="range" 
+           min="0" 
+           max="100" 
+           value={volume}
+           onChange={handleVolumeChange}
+           className={styles.volumeSlider}
+        />
       </div>
     </div>
   );
