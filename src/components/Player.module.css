@@ -11,7 +11,7 @@
   display: flex;
   align-items: center;
   gap: 16px;
-  width: 30%;
+  width: 28%;
   min-width: 0;
 }
 
@@ -33,7 +33,7 @@
 
 .textDetails h4 {
   font-family: var(--font-display), sans-serif;
-  font-size: 1.15rem;
+  font-size: 1.05rem;
   font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -53,11 +53,19 @@
   font-weight: 400;
 }
 
+/* Center section — controls + progress */
+.centerSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 44%;
+}
+
 .controls {
   display: flex;
   align-items: center;
   gap: 24px;
-  width: 40%;
   justify-content: center;
 }
 
@@ -75,8 +83,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
   color: #fff;
@@ -89,11 +97,66 @@
   box-shadow: 0 6px 28px var(--glow-color);
 }
 
+/* Progress bar */
+.progressRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.timeLabel {
+  font-family: var(--font-display), sans-serif;
+  font-size: 11px;
+  color: var(--text-muted);
+  min-width: 36px;
+  text-align: center;
+  letter-spacing: 0.04em;
+}
+
+.progressBar {
+  flex: 1;
+  height: 4px;
+  background: var(--bg-tertiary);
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+  border-radius: 2px;
+  transition: width 0.25s linear;
+  position: relative;
+}
+
+.progressFill::after {
+  content: "";
+  position: absolute;
+  right: -3px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-secondary);
+  box-shadow: 0 0 8px var(--glow-color);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.progressBar:hover .progressFill::after {
+  opacity: 1;
+}
+
+/* Actions (right side) */
 .actions {
   display: flex;
   align-items: center;
   gap: 12px;
-  width: 30%;
+  width: 28%;
   justify-content: flex-end;
 }
 

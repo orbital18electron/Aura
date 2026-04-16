@@ -6,31 +6,52 @@ import { useSession } from "next-auth/react";
 import { playSong, pauseSong, setVolume } from "@/lib/spotify";
 import { useState, useEffect } from "react";
 
+function formatTime(ms) {
+  const totalSec = Math.floor(ms / 1000);
+  const mins = Math.floor(totalSec / 60);
+  const secs = totalSec % 60;
+  return `${mins}:${secs.toString().padStart(2, "0")}`;
+}
+
 export default function Player() {
   const { data: session } = useSession();
   const currentTrack = useStore((state) => state.currentTrack);
   const isPlaying = useStore((state) => state.isPlaying);
   const setIsPlaying = useStore((state) => state.setIsPlaying);
+  const playingSince = useStore((state) => state.playingSince);
   const showLyrics = useStore((state) => state.showLyrics);
   const toggleLyrics = useStore((state) => state.toggleLyrics);
   
   const [volume, setVolumeLevel] = useState(50);
   const [dominantColor, setDominantColor] = useState(null);
+  const [progressMs, setProgressMs] = useState(0);
 
-  // Safe color extraction with CORS error handling
+  const durationMs = currentTrack?.duration_ms || 0;
+
+  // Progress timer
+  useEffect(() => {
+    if (!isPlaying || !playingSince) return;
+    const interval = setInterval(() => {
+      setProgressMs(Date.now() - playingSince);
+    }, 250);
+    return () => clearInterval(interval);
+  }, [isPlaying, playingSince]);
+
+  // Reset progress when track changes
+  useEffect(() => {
+    setProgressMs(0);
+  }, [currentTrack]);
+
+  // Safe color extraction
   useEffect(() => {
     if (!currentTrack?.album?.images?.[0]?.url) {
       setDominantColor(null);
       return;
     }
-
-    const imgUrl = currentTrack.album.images[0].url;
-
     try {
       const img = document.createElement("img");
       img.crossOrigin = "anonymous";
-      img.src = imgUrl;
-      
+      img.src = currentTrack.album.images[0].url;
       img.onload = () => {
         try {
           const canvas = document.createElement("canvas");
@@ -41,13 +62,10 @@ export default function Player() {
           const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
           setDominantColor(`rgba(${r}, ${g}, ${b}, 0.2)`);
         } catch {
-          // CORS SecurityError — silently fall back
           setDominantColor(null);
         }
       };
-      img.onerror = () => {
-        setDominantColor(null);
-      };
+      img.onerror = () => setDominantColor(null);
     } catch {
       setDominantColor(null);
     }
@@ -75,11 +93,12 @@ export default function Player() {
       try {
         await setVolume(session.user.accessToken, newVol);
       } catch {
-        console.warn("Volume control requires Spotify Premium + Desktop/Web Player");
+        // Premium restriction
       }
     }
   };
 
+  const progressPercent = durationMs > 0 ? Math.min((progressMs / durationMs) * 100, 100) : 0;
   const bgStyle = dominantColor
     ? { background: `linear-gradient(to right, ${dominantColor}, var(--player-bg))` }
     : {};
@@ -98,12 +117,23 @@ export default function Player() {
         </div>
       </div>
 
-      <div className={styles.controls}>
-        <button className={styles.controlBtn}><SkipBack size={20} /></button>
-        <button className={styles.playBtn} onClick={togglePlay}>
-          {isPlaying ? <Pause size={24} fill="currentColor" /> : <Play size={24} fill="currentColor" />}
-        </button>
-        <button className={styles.controlBtn}><SkipForward size={20} /></button>
+      <div className={styles.centerSection}>
+        <div className={styles.controls}>
+          <button className={styles.controlBtn}><SkipBack size={20} /></button>
+          <button className={styles.playBtn} onClick={togglePlay}>
+            {isPlaying ? <Pause size={24} fill="currentColor" /> : <Play size={24} fill="currentColor" />}
+          </button>
+          <button className={styles.controlBtn}><SkipForward size={20} /></button>
+        </div>
+        {currentTrack && (
+          <div className={styles.progressRow}>
+            <span className={styles.timeLabel}>{formatTime(progressMs)}</span>
+            <div className={styles.progressBar}>
+              <div className={styles.progressFill} style={{ width: `${progressPercent}%` }} />
+            </div>
+            <span className={styles.timeLabel}>{formatTime(durationMs)}</span>
+          </div>
+        )}
       </div>
 
       <div className={styles.actions}>

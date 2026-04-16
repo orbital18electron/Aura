@@ -86,6 +86,59 @@
   margin-bottom: 20px;
 }
 
+/* Progress bar */
+.progressRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.timeLabel {
+  font-family: var(--font-display), sans-serif;
+  font-size: 12px;
+  color: var(--text-muted);
+  min-width: 36px;
+  text-align: center;
+  letter-spacing: 0.04em;
+}
+
+.progressBar {
+  flex: 1;
+  height: 5px;
+  background: var(--bg-color);
+  border-radius: 3px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+  border-radius: 3px;
+  transition: width 0.25s linear;
+  position: relative;
+}
+
+.progressFill::after {
+  content: "";
+  position: absolute;
+  right: -4px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent-secondary);
+  box-shadow: 0 0 10px var(--glow-color);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.progressBar:hover .progressFill::after {
+  opacity: 1;
+}
+
 /* Controls */
 .controlsRow {
   display: flex;

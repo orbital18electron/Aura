@@ -4,15 +4,39 @@ import { useStore } from "@/lib/store";
 import { useSession } from "next-auth/react";
 import { playSong, pauseSong, setVolume } from "@/lib/spotify";
 import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX, Disc3 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "./NowPlaying.module.css";
+
+function formatTime(ms) {
+  const totalSec = Math.floor(ms / 1000);
+  const mins = Math.floor(totalSec / 60);
+  const secs = totalSec % 60;
+  return `${mins}:${secs.toString().padStart(2, "0")}`;
+}
 
 export default function NowPlaying() {
   const { data: session } = useSession();
   const currentTrack = useStore((state) => state.currentTrack);
   const isPlaying = useStore((state) => state.isPlaying);
   const setIsPlaying = useStore((state) => state.setIsPlaying);
+  const playingSince = useStore((state) => state.playingSince);
   const [volume, setVolumeLevel] = useState(50);
+  const [progressMs, setProgressMs] = useState(0);
+
+  const durationMs = currentTrack?.duration_ms || 0;
+
+  // Progress timer
+  useEffect(() => {
+    if (!isPlaying || !playingSince) return;
+    const interval = setInterval(() => {
+      setProgressMs(Date.now() - playingSince);
+    }, 250);
+    return () => clearInterval(interval);
+  }, [isPlaying, playingSince]);
+
+  useEffect(() => {
+    setProgressMs(0);
+  }, [currentTrack]);
 
   if (!currentTrack) {
     return (
@@ -27,6 +51,7 @@ export default function NowPlaying() {
   const trackName = currentTrack?.name || "Unknown Track";
   const artistNames = currentTrack?.artists?.map(a => a.name).join(", ") || "Unknown Artist";
   const albumName = currentTrack?.album?.name || "";
+  const progressPercent = durationMs > 0 ? Math.min((progressMs / durationMs) * 100, 100) : 0;
 
   const togglePlay = async () => {
     if (!session) return;
@@ -75,6 +100,15 @@ export default function NowPlaying() {
         <h3 className={styles.trackName}>{trackName}</h3>
         <p className={styles.artistName}>{artistNames}</p>
         {albumName && <p className={styles.albumName}>{albumName}</p>}
+
+        {/* Progress bar */}
+        <div className={styles.progressRow}>
+          <span className={styles.timeLabel}>{formatTime(progressMs)}</span>
+          <div className={styles.progressBar}>
+            <div className={styles.progressFill} style={{ width: `${progressPercent}%` }} />
+          </div>
+          <span className={styles.timeLabel}>{formatTime(durationMs)}</span>
+        </div>
 
         <div className={styles.controlsRow}>
           <button className={styles.controlBtn}><SkipBack size={22} /></button>
