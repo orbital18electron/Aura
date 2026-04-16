@@ -14,11 +14,17 @@ async function getTopTracks(token) {
   }
 }
 
-async function getGreeting() {
+function getGreeting() {
   const hour = new Date().getHours();
-  if (hour < 12) return "Good Morning";
-  if (hour < 18) return "Good Afternoon";
-  return "Good Evening";
+  if (hour >= 5 && hour < 12) return "Good Morning";
+  if (hour >= 12 && hour < 17) return "Good Afternoon";
+  if (hour >= 17 && hour < 21) return "Good Evening";
+  return "Good Night";
+}
+
+function getFirstName(fullName) {
+  if (!fullName) return "";
+  return fullName.split(" ")[0];
 }
 
 export default async function Home() {
@@ -43,12 +49,13 @@ export default async function Home() {
       return true;
     });
 
-  const greeting = await getGreeting();
+  const greeting = getGreeting();
+  const firstName = getFirstName(session.user.name);
 
   return (
     <div className={styles.container}>
       <header className={styles.header}>
-        <h1 className={styles.greeting}>{greeting}.</h1>
+        <h1 className={styles.greeting}>{greeting}, {firstName}!</h1>
         <p className={styles.subtitle}>Here are your current obsessions.</p>
       </header>
 
