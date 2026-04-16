@@ -1,0 +1,92 @@
+.playerContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  padding: 0 32px;
+}
+
+.trackInfo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 30%;
+}
+
+.coverPlaceholder {
+  width: 56px;
+  height: 56px;
+  background-color: var(--bg-tertiary);
+  border-radius: 8px;
+}
+
+.textDetails h4 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.textDetails p {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  width: 40%;
+  justify-content: center;
+}
+
+.controlBtn {
+  color: var(--text-muted);
+  transition: color 0.2s;
+}
+
+.controlBtn:hover {
+  color: var(--text-main);
+}
+
+.playBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--text-main);
+  color: var(--bg-color);
+  transition: transform 0.2s ease;
+}
+
+.playBtn:hover {
+  transform: scale(1.05);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 30%;
+  justify-content: flex-end;
+}
+
+.actions .icon {
+  color: var(--text-muted);
+}
+
+.volumeBar {
+  width: 100px;
+  height: 4px;
+  border-radius: 2px;
+  background-color: var(--bg-tertiary);
+  cursor: pointer;
+}
+
+.volumeLevel {
+  width: 50%;
+  height: 100%;
+  background-color: var(--text-main);
+  border-radius: 2px;
+}

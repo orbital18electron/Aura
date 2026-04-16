@@ -1,0 +1,61 @@
+.container {
+  display: grid;
+  grid-template-areas:
+    "sidebar main"
+    "player player";
+  grid-template-columns: 240px 1fr;
+  grid-template-rows: 1fr 90px;
+  height: 100vh;
+  overflow: hidden;
+  background-color: var(--bg-color);
+}
+
+.sidebarSection {
+  grid-area: sidebar;
+  border-right: 1px solid var(--border-color);
+  background-color: var(--bg-secondary);
+}
+
+.mainSection {
+  grid-area: main;
+  position: relative;
+  overflow: hidden;
+}
+
+.contentScroll {
+  height: 100%;
+  overflow-y: auto;
+  padding: 32px 48px;
+}
+
+.playerSection {
+  grid-area: player;
+  background-color: var(--player-bg);
+  border-top: 1px solid var(--player-border);
+  position: relative;
+  z-index: 10;
+  backdrop-filter: blur(10px);
+}
+
+.loginWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: var(--bg-color);
+}
+
+.loader {
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--border-color);
+  border-top-color: var(--text-main);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
