@@ -1,42 +1,56 @@
 "use client";
 import styles from "./Player.module.css";
-import { Play, Pause, SkipBack, SkipForward, Volume2 } from "lucide-react";
+import { Play, Pause, SkipBack, SkipForward, Volume2, Mic2 } from "lucide-react";
 import { useStore } from "@/lib/store";
 import { useSession } from "next-auth/react";
 import { playSong, pauseSong, setVolume } from "@/lib/spotify";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
 export default function Player() {
   const { data: session } = useSession();
   const currentTrack = useStore((state) => state.currentTrack);
   const isPlaying = useStore((state) => state.isPlaying);
   const setIsPlaying = useStore((state) => state.setIsPlaying);
+  const showLyrics = useStore((state) => state.showLyrics);
+  const toggleLyrics = useStore((state) => state.toggleLyrics);
   
   const [volume, setVolumeLevel] = useState(50);
-  const [dominantColor, setDominantColor] = useState("var(--player-bg)");
+  const [dominantColor, setDominantColor] = useState(null);
 
+  // Safe color extraction with CORS error handling
   useEffect(() => {
     if (!currentTrack?.album?.images?.[0]?.url) {
-       setDominantColor("var(--player-bg)");
-       return;
+      setDominantColor(null);
+      return;
     }
 
-    const img = new Image();
-    img.crossOrigin = "Anonymous";
-    img.src = currentTrack.album.images[0].url;
-    
-    img.onload = () => {
-      const canvas = document.createElement("canvas");
-      canvas.width = 1;
-      canvas.height = 1;
-      const ctx = canvas.getContext("2d");
-      ctx.drawImage(img, 0, 0, 1, 1);
-      const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
-      setDominantColor(`rgba(${r}, ${g}, ${b}, 0.2)`);
-    };
-    img.onerror = () => {
-      setDominantColor("var(--player-bg)");
-    };
+    const imgUrl = currentTrack.album.images[0].url;
+
+    try {
+      const img = document.createElement("img");
+      img.crossOrigin = "anonymous";
+      img.src = imgUrl;
+      
+      img.onload = () => {
+        try {
+          const canvas = document.createElement("canvas");
+          canvas.width = 1;
+          canvas.height = 1;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, 1, 1);
+          const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
+          setDominantColor(`rgba(${r}, ${g}, ${b}, 0.2)`);
+        } catch {
+          // CORS SecurityError — silently fall back
+          setDominantColor(null);
+        }
+      };
+      img.onerror = () => {
+        setDominantColor(null);
+      };
+    } catch {
+      setDominantColor(null);
+    }
   }, [currentTrack]);
 
   const togglePlay = async () => {
@@ -51,7 +65,6 @@ export default function Player() {
       }
     } catch (err) {
       console.error("Playback error", err);
-      alert(err.message || "Failed to start playback. Make sure you have Spotify open on a device!");
     }
   };
 
@@ -61,14 +74,18 @@ export default function Player() {
     if (session) {
       try {
         await setVolume(session.user.accessToken, newVol);
-      } catch (err) {
-         console.warn("Failed to set volume (Desktop Web Player issue/Premium restriction)");
+      } catch {
+        console.warn("Volume control requires Spotify Premium + Desktop/Web Player");
       }
     }
   };
 
+  const bgStyle = dominantColor
+    ? { background: `linear-gradient(to right, ${dominantColor}, var(--player-bg))` }
+    : {};
+
   return (
-    <div className={styles.playerContainer} style={{ background: dominantColor ? `linear-gradient(to right, ${dominantColor}, var(--player-bg))` : "" }}>
+    <div className={styles.playerContainer} style={bgStyle}>
       <div className={styles.trackInfo}>
         {currentTrack?.album?.images?.[0]?.url ? (
            <img src={currentTrack.album.images[0].url} className={styles.coverPlaceholder} alt="cover" />
@@ -77,7 +94,7 @@ export default function Player() {
         )}
         <div className={styles.textDetails}>
           <h4>{currentTrack ? currentTrack.name : "Select a song"}</h4>
-          <p>{currentTrack ? currentTrack.artists.map(a => a.name).join(", ") : "Aura"}</p>
+          <p>{currentTrack ? currentTrack.artists?.map(a => a.name).join(", ") : "Aura"}</p>
         </div>
       </div>
 
@@ -90,6 +107,13 @@ export default function Player() {
       </div>
 
       <div className={styles.actions}>
+        <button
+          className={`${styles.lyricsBtn} ${showLyrics ? styles.lyricsBtnActive : ""}`}
+          onClick={toggleLyrics}
+          title="Toggle Lyrics"
+        >
+          <Mic2 size={18} />
+        </button>
         <Volume2 size={20} className={styles.icon} />
         <input 
            type="range" 

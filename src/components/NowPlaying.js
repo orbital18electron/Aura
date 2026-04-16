@@ -1,0 +1,102 @@
+"use client";
+
+import { useStore } from "@/lib/store";
+import { useSession } from "next-auth/react";
+import { playSong, pauseSong, setVolume } from "@/lib/spotify";
+import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX, Disc3 } from "lucide-react";
+import { useState } from "react";
+import styles from "./NowPlaying.module.css";
+
+export default function NowPlaying() {
+  const { data: session } = useSession();
+  const currentTrack = useStore((state) => state.currentTrack);
+  const isPlaying = useStore((state) => state.isPlaying);
+  const setIsPlaying = useStore((state) => state.setIsPlaying);
+  const [volume, setVolumeLevel] = useState(50);
+
+  if (!currentTrack) {
+    return (
+      <div className={styles.emptyState}>
+        <Disc3 size={48} className={styles.emptyIcon} />
+        <p className={styles.emptyText}>Play a track to see it here</p>
+      </div>
+    );
+  }
+
+  const albumArt = currentTrack?.album?.images?.[0]?.url;
+  const trackName = currentTrack?.name || "Unknown Track";
+  const artistNames = currentTrack?.artists?.map(a => a.name).join(", ") || "Unknown Artist";
+  const albumName = currentTrack?.album?.name || "";
+
+  const togglePlay = async () => {
+    if (!session) return;
+    try {
+      if (isPlaying) {
+        await pauseSong(session.user.accessToken);
+        setIsPlaying(false);
+      } else {
+        await playSong(session.user.accessToken, currentTrack.uri);
+        setIsPlaying(true);
+      }
+    } catch (err) {
+      console.error("Playback error", err);
+    }
+  };
+
+  const handleVolumeChange = async (e) => {
+    const newVol = parseInt(e.target.value);
+    setVolumeLevel(newVol);
+    if (session) {
+      try {
+        await setVolume(session.user.accessToken, newVol);
+      } catch {
+        // Premium restriction
+      }
+    }
+  };
+
+  return (
+    <div className={styles.nowPlaying}>
+      <div className={styles.artSection}>
+        {albumArt ? (
+          <img
+            src={albumArt}
+            alt={trackName}
+            className={`${styles.albumArt} ${isPlaying ? styles.spinning : ""}`}
+          />
+        ) : (
+          <div className={`${styles.albumArt} ${styles.placeholder}`}>
+            <Disc3 size={64} />
+          </div>
+        )}
+      </div>
+
+      <div className={styles.detailsSection}>
+        <h3 className={styles.trackName}>{trackName}</h3>
+        <p className={styles.artistName}>{artistNames}</p>
+        {albumName && <p className={styles.albumName}>{albumName}</p>}
+
+        <div className={styles.controlsRow}>
+          <button className={styles.controlBtn}><SkipBack size={22} /></button>
+          <button className={styles.mainPlayBtn} onClick={togglePlay}>
+            {isPlaying ? <Pause size={28} fill="currentColor" /> : <Play size={28} fill="currentColor" />}
+          </button>
+          <button className={styles.controlBtn}><SkipForward size={22} /></button>
+        </div>
+
+        <div className={styles.volumeRow}>
+          {volume === 0 ? <VolumeX size={18} /> : <Volume2 size={18} />}
+          <input
+            type="range"
+            min="0"
+            max="100"
+            value={volume}
+            onChange={handleVolumeChange}
+            className={styles.volumeSlider}
+          />
+          <span className={styles.volumeLabel}>{volume}%</span>
+        </div>
+      </div>
+    </div>
+  );
+}

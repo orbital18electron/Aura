@@ -137,3 +137,30 @@
   cursor: pointer;
   border: none;
 }
+
+.lyricsBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  color: var(--text-muted);
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lyricsBtn:hover {
+  color: var(--accent-tertiary);
+  border-color: var(--accent-tertiary);
+  background: rgba(14, 154, 167, 0.08);
+}
+
+.lyricsBtnActive {
+  color: var(--accent-tertiary);
+  background: rgba(14, 154, 167, 0.12);
+  border-color: var(--accent-tertiary);
+  box-shadow: 0 0 12px var(--turquoise-glow);
+}

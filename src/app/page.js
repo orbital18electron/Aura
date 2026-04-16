@@ -4,6 +4,7 @@ import { fetchWebApi, getRecentlyPlayed } from "@/lib/spotify";
 import styles from "./page.module.css";
 import { redirect } from "next/navigation";
 import TrackCard from "@/components/TrackCard";
+import NowPlaying from "@/components/NowPlaying";
 
 async function getTopTracks(token) {
   try {
@@ -50,6 +51,12 @@ export default async function Home() {
         <h1 className={styles.greeting}>{greeting}.</h1>
         <p className={styles.subtitle}>Here are your current obsessions.</p>
       </header>
+
+      {/* Now Playing Section */}
+      <section>
+        <h2 className={styles.sectionTitle}>Now Playing</h2>
+        <NowPlaying />
+      </section>
 
       <section>
         <h2 className={styles.sectionTitle}>Your Top Tracks</h2>
