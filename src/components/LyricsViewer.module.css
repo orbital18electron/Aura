@@ -1,0 +1,46 @@
+.lyricsContainer {
+  height: 100%;
+  width: 100%;
+  overflow-y: hidden; /* Hide scrollbar but keep scroll behavior */
+  position: relative;
+  padding: 40px 20px;
+  mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+}
+
+.lyricsWrapper {
+  height: 100%;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  padding-bottom: 50vh; /* Space to scroll past last lyric */
+  padding-top: 20vh;
+}
+
+/* Hide scrollbar for a cleaner look */
+.lyricsWrapper::-webkit-scrollbar {
+  display: none;
+}
+.lyricsWrapper {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.lyricLine {
+  font-size: 24px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 24px;
+  transition: all 0.3s ease;
+  transform-origin: left center;
+  cursor: pointer;
+}
+
+.lyricLine.active {
+  color: #fff;
+  font-size: 32px;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+.lyricLine:hover {
+  color: rgba(255, 255, 255, 0.8);
+}

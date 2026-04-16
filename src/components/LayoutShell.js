@@ -1,6 +1,7 @@
 "use client";
 import Sidebar from "./Sidebar";
 import Player from "./Player";
+import LyricsViewer from "./LyricsViewer";
 import styles from "./LayoutShell.module.css";
 import { useSession } from "next-auth/react";
 
@@ -25,6 +26,9 @@ export default function LayoutShell({ children }) {
           {children}
         </div>
       </main>
+      <aside className={styles.lyricsSection}>
+        <LyricsViewer />
+      </aside>
       <footer className={styles.playerSection}>
         <Player />
       </footer>

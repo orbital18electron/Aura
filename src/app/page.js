@@ -4,6 +4,7 @@ import { fetchWebApi } from "@/lib/spotify";
 import styles from "./page.module.css";
 import Image from "next/image";
 import { redirect } from "next/navigation";
+import TrackCard from "@/components/TrackCard";
 
 async function getTopTracks(token) {
   try {
@@ -31,26 +32,13 @@ export default async function Home() {
 
       <section className={styles.tracksGrid}>
         {topTracks?.items?.map((track) => (
-          <div key={track.id} className={styles.trackCard}>
-            <div className={styles.imgWrapper}>
-              <Image 
-                src={track.album.images[0].url} 
-                alt={track.name} 
-                width={80} 
-                height={80} 
-                className={styles.cover}
-              />
-            </div>
-            <div className={styles.info}>
-              <h3>{track.name}</h3>
-              <p>{track.artists.map(a => a.name).join(", ")}</p>
-            </div>
-          </div>
+          <TrackCard key={track.id} track={track} styles={styles} />
         ))}
         {(!topTracks || !topTracks.items) && (
           <p className={styles.subtitle}>Please engage with some tracks to see recommendations.</p>
         )}
       </section>
+
     </div>
   );
 }

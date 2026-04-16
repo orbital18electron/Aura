@@ -2,7 +2,8 @@ const scopes = [
   "user-read-email",
   "playlist-read-private",
   "playlist-read-collaborative",
-  "user-read-email",
+  "playlist-modify-public",
+  "playlist-modify-private",
   "streaming",
   "user-read-private",
   "user-library-read",
@@ -30,7 +31,7 @@ export const fetchWebApi = async (endpoint, method, body, token) => {
       ...(method === 'POST' || method === 'PUT' ? { 'Content-Type': 'application/json' } : {})
     },
     method,
-    body: JSON.stringify(body)
+    ...(body ? { body: JSON.stringify(body) } : {})
   });
 
   if (!res.ok) {
@@ -39,4 +40,20 @@ export const fetchWebApi = async (endpoint, method, body, token) => {
   }
 
   return res.status === 204 ? null : await res.json();
+};
+
+export const playSong = async (token, trackUri) => {
+  return await fetchWebApi('v1/me/player/play', 'PUT', { uris: [trackUri] }, token);
+};
+
+export const pauseSong = async (token) => {
+  return await fetchWebApi('v1/me/player/pause', 'PUT', null, token);
+};
+
+export const createPlaylist = async (token, userId, name, description) => {
+  return await fetchWebApi(`v1/users/${userId}/playlists`, 'POST', {
+    name,
+    description,
+    public: false
+  }, token);
 };

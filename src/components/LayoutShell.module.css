@@ -1,9 +1,9 @@
 .container {
   display: grid;
   grid-template-areas:
-    "sidebar main"
-    "player player";
-  grid-template-columns: 240px 1fr;
+    "sidebar main lyrics"
+    "player player player";
+  grid-template-columns: 240px 1fr 340px;
   grid-template-rows: 1fr 90px;
   height: 100vh;
   overflow: hidden;
@@ -13,6 +13,12 @@
 .sidebarSection {
   grid-area: sidebar;
   border-right: 1px solid var(--border-color);
+  background-color: var(--bg-secondary);
+}
+
+.lyricsSection {
+  grid-area: lyrics;
+  border-left: 1px solid var(--border-color);
   background-color: var(--bg-secondary);
 }
 
