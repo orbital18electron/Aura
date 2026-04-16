@@ -57,3 +57,15 @@ export const createPlaylist = async (token, userId, name, description) => {
     public: false
   }, token);
 };
+
+export const searchSpotify = async (token, query) => {
+  return await fetchWebApi(`v1/search?q=${encodeURIComponent(query)}&type=track&limit=20`, 'GET', null, token);
+};
+
+export const getUserPlaylists = async (token) => {
+  return await fetchWebApi(`v1/me/playlists?limit=20`, 'GET', null, token);
+};
+
+export const getSavedTracks = async (token) => {
+  return await fetchWebApi(`v1/me/tracks?limit=24`, 'GET', null, token);
+};
