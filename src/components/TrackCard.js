@@ -21,8 +21,8 @@ export default function TrackCard({ track, styles }) {
       await playSong(session.user.accessToken, track.uri);
     } catch (err) {
       console.error("Failed to play song. Make sure you have an active Spotify device open.", err);
-      // Revert if it fails (not ideal UX but good for error catching)
       setIsPlaying(false);
+      alert(err.message || "Failed to start playback. Make sure you have Spotify open on a device!");
     }
   };
 

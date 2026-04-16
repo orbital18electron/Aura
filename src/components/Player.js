@@ -23,6 +23,7 @@ export default function Player() {
       }
     } catch (err) {
       console.error("Playback error", err);
+      alert(err.message || "Failed to start playback. Make sure you have Spotify open on a device!");
     }
   };
 

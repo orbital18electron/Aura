@@ -45,7 +45,12 @@ export const fetchWebApi = async (endpoint, method, body, token) => {
     throw new Error(`Error ${res.status}: ${errorDetail || res.statusText}`);
   }
 
-  return res.status === 204 ? null : await res.json();
+  if (res.status === 204) return null;
+  try {
+    return await res.json();
+  } catch (err) {
+    return null;
+  }
 };
 
 export const playSong = async (token, trackUri) => {
