@@ -80,7 +80,13 @@ export const searchSpotify = async (token, query) => {
 };
 
 export const getUserPlaylists = async (token) => {
-  return await fetchWebApi(`v1/me/playlists?limit=20`, 'GET', null, token);
+  return await fetchWebApi(`v1/me/playlists?limit=50`, 'GET', null, token);
+};
+
+export const addTrackToPlaylist = async (token, playlistId, trackUri) => {
+  return await fetchWebApi(`v1/playlists/${playlistId}/tracks`, 'POST', {
+    uris: [trackUri],
+  }, token);
 };
 
 export const getSavedTracks = async (token) => {
