@@ -37,7 +37,12 @@ export const fetchWebApi = async (endpoint, method, body, token) => {
 
   if (!res.ok) {
     if (res.status === 204) return null; // Expected for some actions like play/pause
-    throw new Error(`Error fetching API: ${res.status} ${res.statusText}`);
+    let errorDetail = "";
+    try {
+      const errorData = await res.json();
+      errorDetail = errorData.error?.message || JSON.stringify(errorData);
+    } catch(e) {}
+    throw new Error(`Error ${res.status}: ${errorDetail || res.statusText}`);
   }
 
   return res.status === 204 ? null : await res.json();
